@@ -11,7 +11,7 @@ configs(IntegrationTestConfig, AcceptanceTestConfig, TestAll)
 
 version := "0.1"
 
-scalaVersion := "2.12.9"
+scalaVersion := "2.11.12"
 
 val sparkV = "2.4.3"
 
@@ -34,11 +34,11 @@ libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "3.0.8" % "test"
 )
 
-mainClass in(Compile, run) := Some("com.gilcu2.MetricClassifierMain")
+mainClass in(Compile, run) := Some("com.gilcu2.StreamingMain")
 
 test in assembly := {}
 
-assemblyJarName in assembly := "MetricClassifier.jar"
+assemblyJarName in assembly := "SparkStreaming.jar"
 
 assemblyMergeStrategy in assembly := {
   case PathList("META-INF", xs@_*) => MergeStrategy.discard
