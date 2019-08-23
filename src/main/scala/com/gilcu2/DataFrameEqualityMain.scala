@@ -1,12 +1,11 @@
 package com.gilcu2
 
-import com.gilcu2.interfaces._
-import com.typesafe.config.Config
 import com.gilcu2.interfaces.{ConfigValuesTrait, LineArgumentValuesTrait, MainTrait}
+import com.typesafe.config.Config
 import org.apache.spark.sql.SparkSession
 import org.rogach.scallop.ScallopConf
 
-object TCPStreamingMain extends MainTrait {
+object DataFrameEqualityMain extends MainTrait {
 
   def process(configValues: ConfigValuesTrait, lineArguments: LineArgumentValuesTrait)(
     implicit spark: SparkSession): Unit = {
@@ -35,9 +34,10 @@ object TCPStreamingMain extends MainTrait {
   }
 
   def getConfigValues(conf: Config): ConfigValuesTrait = {
-    //    val dataDir = conf.getString("DataDir")
-    val dataDir = "kk"
-    ConfigValues(dataDir)
+    val firstPath = conf.getString("FirstDataFramePath")
+    val secondPath = conf.getString("SecondDataFramePath")
+    val keyFields = conf.getString("KeyFields").split(",")
+    ConfigValues(firstPath, secondPath, keyFields)
   }
 
   def getLineArgumentsValues(args: Array[String], configValues: ConfigValuesTrait): LineArgumentValuesTrait = {
@@ -59,7 +59,7 @@ object TCPStreamingMain extends MainTrait {
 
   case class CommandParameterValues(logCountsAndTimes: Boolean) extends LineArgumentValuesTrait
 
-  case class ConfigValues(dataDir: String) extends ConfigValuesTrait
+  case class ConfigValues(firstPath:String, secondPath:String, keyFields:Array[String]) extends ConfigValuesTrait
 
 
 }

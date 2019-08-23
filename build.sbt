@@ -1,11 +1,12 @@
 import AcceptanceTest._
 import IntegrationTest._
 import UnitTest._
+import RegressionTest._
 
 name := "spark-streaming"
 organization := "com.gilcu2"
 
-UnitTestSettings ++ IntegrationTestSettings ++ AcceptanceTestSettings
+UnitTestSettings ++ IntegrationTestSettings ++ AcceptanceTestSettings ++ RegressionTestSettings
 lazy val TestAll: Configuration = config("test-all").extend(AcceptanceTest.AcceptanceTestConfig)
 configs(IntegrationTestConfig, AcceptanceTestConfig, TestAll)
 
@@ -19,11 +20,6 @@ libraryDependencies ++= Seq(
 
   "org.apache.spark" %% "spark-core" % sparkV % "provided",
   "org.apache.spark" %% "spark-sql" % sparkV % "provided",
-  "org.apache.spark" %% "spark-streaming" % sparkV % "provided",
-  "org.apache.spark" %% "spark-sql-kafka-0-10" % sparkV % "provided",
-  "org.apache.kafka" % "kafka-clients" % "0.10.2.2" % "provided",
-  //  "org.apache.spark" %% "spark-streaming-kafka-0-10" % sparkV,
-//  "org.apache.spark" %% "spark-cassandra-connector" % sparkV % "provided",
 
   "com.typesafe" % "config" % "1.3.4",
 
