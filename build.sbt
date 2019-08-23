@@ -20,7 +20,9 @@ libraryDependencies ++= Seq(
   "org.apache.spark" %% "spark-core" % sparkV % "provided",
   "org.apache.spark" %% "spark-sql" % sparkV % "provided",
   "org.apache.spark" %% "spark-streaming" % sparkV % "provided",
-  "org.apache.spark" %% "spark-streaming-kafka-0-10" % sparkV % "provided",
+  "org.apache.spark" %% "spark-sql-kafka-0-10" % sparkV % "provided",
+  "org.apache.kafka" % "kafka-clients" % "0.10.2.2" % "provided",
+  //  "org.apache.spark" %% "spark-streaming-kafka-0-10" % sparkV,
 //  "org.apache.spark" %% "spark-cassandra-connector" % sparkV % "provided",
 
   "com.typesafe" % "config" % "1.3.4",
@@ -34,13 +36,14 @@ libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "3.0.8" % "test"
 )
 
-mainClass in(Compile, run) := Some("com.gilcu2.StreamingMain")
+mainClass in(Compile, run) := Some("com.gilcu2.TCPStreamingMain")
 
 test in assembly := {}
 
 assemblyJarName in assembly := "SparkStreaming.jar"
 
 assemblyMergeStrategy in assembly := {
+  //  case PathList("org", "apache", "spark", "unused", "UnusedStubClass.class") => MergeStrategy.first
   case PathList("META-INF", xs@_*) => MergeStrategy.discard
   case x => MergeStrategy.first
 }

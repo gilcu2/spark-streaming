@@ -6,7 +6,7 @@ import com.gilcu2.interfaces.{ConfigValuesTrait, LineArgumentValuesTrait, MainTr
 import org.apache.spark.sql.SparkSession
 import org.rogach.scallop.ScallopConf
 
-object StreamingMain extends MainTrait {
+object TCPStreamingMain extends MainTrait {
 
   def process(configValues: ConfigValuesTrait, lineArguments: LineArgumentValuesTrait)(
     implicit spark: SparkSession): Unit = {
