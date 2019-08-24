@@ -10,7 +10,7 @@ trait SparkSessionTestWrapper {
 
   val sparkConf = new SparkConf().setAppName("PhoneLogProcessing test").set("spark.network.timeout", TIME_MS)
 
-  lazy val spark: SparkSession = {
+  implicit lazy val spark: SparkSession = {
     SparkSession
       .builder()
       .config(sparkConf)
