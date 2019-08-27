@@ -14,6 +14,7 @@ version := "0.1"
 scalaVersion := "2.11.12"
 
 val sparkV = "2.4.3"
+val circeV = "0.11.1"
 
 libraryDependencies ++= Seq(
 
@@ -23,18 +24,22 @@ libraryDependencies ++= Seq(
   "org.apache.spark" %% "spark-sql-kafka-0-10" % sparkV % "provided",
   "org.apache.kafka" % "kafka-clients" % "0.10.2.2" % "provided",
   //  "org.apache.spark" %% "spark-streaming-kafka-0-10" % sparkV,
-//  "org.apache.spark" %% "spark-cassandra-connector" % sparkV % "provided",
+  //  "org.apache.spark" %% "spark-cassandra-connector" % sparkV % "provided",
 
   "com.typesafe.akka" %% "akka-actor" % "2.5.25",
   "com.typesafe" % "config" % "1.3.4",
 
-  //  "org.apache.kafka" %% "kafka" % "2.3.0",
+  "org.apache.kafka" %% "kafka" % "2.3.0",
 
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2",
   "ch.qos.logback" % "logback-classic" % "1.2.3",
 
   "org.rogach" %% "scallop" % "3.3.1",
   "com.github.nscala-time" %% "nscala-time" % "2.22.0",
+
+  "io.circe" %% "circe-core" % circeV,
+  "io.circe" %% "circe-generic" % circeV,
+  "io.circe" %% "circe-parser" % circeV,
 
   "org.scalatest" %% "scalatest" % "3.0.8" % "test"
 )

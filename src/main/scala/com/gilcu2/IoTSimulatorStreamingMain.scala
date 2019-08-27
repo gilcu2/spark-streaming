@@ -5,11 +5,7 @@ import com.typesafe.config.Config
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.types.DataTypes
 import org.rogach.scallop.ScallopConf
-
-import scala.util.Random._
-
-case class CarEvent(id: Long, x: Int = nextInt(1000), y: Int = nextInt(1000), temperature: Int = nextInt(100),
-                    time: Long = Time.getCurrentTime.getMillis)
+import com.gilcu2.cars.CarEvent
 
 object IoTSimulatorStreamingMain extends SparkMainTrait {
 
@@ -24,10 +20,15 @@ object IoTSimulatorStreamingMain extends SparkMainTrait {
       .option("rowsPerSecond", 1)
       .load
 
-    val iot = rates.flatMap(row => Array(CarEvent(1), CarEvent(2)))
+    val carEvents = rates
+      .flatMap(row => Array(CarEvent(1), CarEvent(2)))
 
-    val kafka = iot
-      .select(iot.col("id").cast(DataTypes.StringType).as("value"))
+    val preparedKafka = carEvents
+      .select(carEvents.col("id").cast(DataTypes.StringType).as("value"))
+    //
+    //    preparedKafka.show
+
+    val kafka = preparedKafka
       .writeStream
       .format("kafka")
       .option("kafka.bootstrap.servers", "localhost:9092")

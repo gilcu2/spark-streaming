@@ -5,7 +5,7 @@ import com.typesafe.config.Config
 import org.apache.spark.sql.SparkSession
 import org.rogach.scallop.ScallopConf
 
-object KafkaStreamingMain extends SparkMainTrait {
+object WordCountKafkaStreamingMain extends SparkMainTrait {
 
   def process(configValues: ConfigValuesTrait, lineArguments: LineArgumentValuesTrait)(
     implicit spark: SparkSession): Unit = {
