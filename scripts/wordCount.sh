@@ -3,9 +3,9 @@
 MASTER="local[8]"
 CONFIGPATH="."
 PROGRAM="../target/scala-2.11/SparkStreaming.jar"
-MAIN=com.gilcu2.KafkaStreamingMain
-OUT=kafka.out
-ERR=kafka.err
+MAIN=com.gilcu2.WordCountKafkaStreamingMain
+OUT=wordCount.out
+ERR=wordCount.err
 if [[ $DEBUG ]];then
     export SPARK_SUBMIT_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005
 fi

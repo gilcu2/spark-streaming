@@ -3,7 +3,7 @@
 MASTER="local[8]"
 CONFIGPATH="."
 PROGRAM="../target/scala-2.11/SparkStreaming.jar"
-MAIN=com.gilcu2.IoTSimulatorAkkaMain
+MAIN=com.gilcu2.IoTProcessingKafkaStreamingMain
 OUT=simulator.out
 ERR=simulator.err
 if [[ $DEBUG ]];then
