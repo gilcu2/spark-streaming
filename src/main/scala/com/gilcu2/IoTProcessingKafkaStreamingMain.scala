@@ -26,7 +26,7 @@ object IoTProcessingKafkaStreamingMain extends SparkMainTrait {
     val lines = df.selectExpr("CAST(value AS STRING)")
       .as[String]
 
-    val carEvents = lines.map(decode[CarEvent](_).right)
+    val carEvents = lines.map(decode[CarEvent](_).right.getOrElse(CarEvent(0)))
 
     val query = carEvents.writeStream
       //      .outputMode("complete")
