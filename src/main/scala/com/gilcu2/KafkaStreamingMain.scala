@@ -1,11 +1,11 @@
 package com.gilcu2
 
-import com.gilcu2.interfaces.{ConfigValuesTrait, LineArgumentValuesTrait, MainTrait}
+import com.gilcu2.interfaces.{ConfigValuesTrait, LineArgumentValuesTrait, MainTrait, SparkMainTrait}
 import com.typesafe.config.Config
 import org.apache.spark.sql.SparkSession
 import org.rogach.scallop.ScallopConf
 
-object KafkaStreamingMain extends MainTrait {
+object KafkaStreamingMain extends SparkMainTrait {
 
   def process(configValues: ConfigValuesTrait, lineArguments: LineArgumentValuesTrait)(
     implicit spark: SparkSession): Unit = {

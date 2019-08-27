@@ -1,32 +1,34 @@
 package com.gilcu2
 
-import com.gilcu2.interfaces._
+import com.gilcu2.interfaces.{ConfigValuesTrait, LineArgumentValuesTrait, SparkMainTrait}
 import com.typesafe.config.Config
-import com.gilcu2.interfaces.{ConfigValuesTrait, LineArgumentValuesTrait, MainTrait}
-import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.{Row, SparkSession}
 import org.rogach.scallop.ScallopConf
 
-object TCPStreamingMain extends SparkMainTrait {
+object IoTSimulatorStreamingMain extends SparkMainTrait {
 
   def process(configValues: ConfigValuesTrait, lineArguments: LineArgumentValuesTrait)(
     implicit spark: SparkSession): Unit = {
 
     import spark.implicits._
 
-    val lines = spark.readStream
-      .format("socket")
-      .option("host", "localhost")
-      .option("port", 9999)
-      .load()
+    val rates = spark
+      .readStream
+      .format("rate") // <-- use RateStreamSource
+      .option("rowsPerSecond", 1)
+      .load
 
-    // Split the lines into words
-    val words = lines.as[String].flatMap(_.split(" "))
+    val lot = rates.flatMap(row => Array("msg dev1", "msg dev2"))
 
-    // Generate running word count
-    val wordCounts = words.groupBy("value").count()
+    //    val df = spark
+    //      .readStream
+    //      .format("kafka")
+    //      .option("kafka.bootstrap.servers", "localhost:9092")
+    //      .option("subscribe", "test")
+    //      .load()
 
-    val query = wordCounts.writeStream
-      .outputMode("complete")
+    val query = lot.writeStream
+      .outputMode("append")
       .format("console")
       .start()
 

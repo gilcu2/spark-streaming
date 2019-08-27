@@ -25,7 +25,10 @@ libraryDependencies ++= Seq(
   //  "org.apache.spark" %% "spark-streaming-kafka-0-10" % sparkV,
 //  "org.apache.spark" %% "spark-cassandra-connector" % sparkV % "provided",
 
+  "com.typesafe.akka" %% "akka-actor" % "2.5.25",
   "com.typesafe" % "config" % "1.3.4",
+
+  "org.apache.kafka" %% "kafka" % "2.3.0",
 
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2",
   "ch.qos.logback" % "logback-classic" % "1.2.3",
