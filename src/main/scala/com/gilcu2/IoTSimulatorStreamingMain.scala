@@ -1,9 +1,15 @@
 package com.gilcu2
 
-import com.gilcu2.interfaces.{ConfigValuesTrait, LineArgumentValuesTrait, SparkMainTrait}
+import com.gilcu2.interfaces.{ConfigValuesTrait, LineArgumentValuesTrait, SparkMainTrait, Time}
 import com.typesafe.config.Config
-import org.apache.spark.sql.{Row, SparkSession}
+import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.types.DataTypes
 import org.rogach.scallop.ScallopConf
+
+import scala.util.Random._
+
+case class CarEvent(id: Long, x: Int = nextInt(1000), y: Int = nextInt(1000), temperature: Int = nextInt(100),
+                    time: Long = Time.getCurrentTime.getMillis)
 
 object IoTSimulatorStreamingMain extends SparkMainTrait {
 
@@ -18,21 +24,22 @@ object IoTSimulatorStreamingMain extends SparkMainTrait {
       .option("rowsPerSecond", 1)
       .load
 
-    val lot = rates.flatMap(row => Array("msg dev1", "msg dev2"))
+    val iot = rates.flatMap(row => Array(CarEvent(1), CarEvent(2)))
 
-    //    val df = spark
-    //      .readStream
-    //      .format("kafka")
-    //      .option("kafka.bootstrap.servers", "localhost:9092")
-    //      .option("subscribe", "test")
-    //      .load()
-
-    val query = lot.writeStream
-      .outputMode("append")
-      .format("console")
+    val kafka = iot
+      .select(iot.col("id").cast(DataTypes.StringType).as("value"))
+      .writeStream
+      .format("kafka")
+      .option("kafka.bootstrap.servers", "localhost:9092")
+      .option("topic", "cars")
       .start()
 
-    query.awaitTermination()
+    //    val console = iot.writeStream
+    //      .outputMode("append")
+    //      .format("console")
+    //      .start()
+
+    kafka.awaitTermination()
 
   }
 

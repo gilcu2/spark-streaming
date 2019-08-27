@@ -28,7 +28,7 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-actor" % "2.5.25",
   "com.typesafe" % "config" % "1.3.4",
 
-  "org.apache.kafka" %% "kafka" % "2.3.0",
+  //  "org.apache.kafka" %% "kafka" % "2.3.0",
 
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2",
   "ch.qos.logback" % "logback-classic" % "1.2.3",
