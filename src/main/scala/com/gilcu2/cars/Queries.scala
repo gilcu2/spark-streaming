@@ -10,11 +10,12 @@ object Queries {
     implicit spark: SparkSession): Dataset[CarEvent] = {
     import spark.implicits._
 
-    val windowedEvents = carEvents.groupBy(
-      window($"time", windowDuration = "10 seconds", slideDuration = "10 seconds"),
-      $"id"
+    val carEventsStreaming = carEvents.map(CarEventStreaming(_))
+
+    val windowedEvents = carEventsStreaming.groupBy(
+      window($"timeStamp", windowDuration = "10 seconds", slideDuration = "10 seconds"),
+      $"id", $"temperature", $"position", $"time"
     ).max("time")
-    windowedEvents.show()
 
     val higherTemperature = windowedEvents.where($"temperature" > alertTemperature)
     higherTemperature.select("id", "position", "temperature", "time").as[CarEvent]

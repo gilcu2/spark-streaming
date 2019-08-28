@@ -5,7 +5,6 @@ import com.gilcu2.interfaces.{ConfigValuesTrait, LineArgumentValuesTrait, SparkM
 import com.typesafe.config.Config
 import io.circe.generic.auto._
 import org.apache.spark.sql.SparkSession
-import org.apache.spark.sql.functions._
 import org.rogach.scallop.ScallopConf
 
 object IoTProcessingKafkaStreamingMain extends SparkMainTrait {
@@ -29,16 +28,16 @@ object IoTProcessingKafkaStreamingMain extends SparkMainTrait {
         io.circe.parser.decode[CarEvent](line)
           .right.getOrElse(CarEvent(0, Position(0, 0), 0, 0))
       )
-      .filter(_.id == 0)
+      .filter(_.id != 0)
 
     val alarmHighTemperature = Queries.lastStatusHighTemperature(carEvents, alertTemperature = 50)
 
-    val query = alarmHighTemperature.writeStream
-      //      .outputMode("complete")
+    val queryTemperature = alarmHighTemperature.writeStream
+      .outputMode("update")
       .format("console")
       .start()
 
-    query.awaitTermination()
+    queryTemperature.awaitTermination()
 
   }
 

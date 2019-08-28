@@ -14,10 +14,10 @@ class QueriesTest extends FlatSpec with Matchers with GivenWhenThen with SparkSe
     Given("Dataset[CarEvent] and alert temperature")
     val position = Position(0, 0)
     val carEvents = spark.createDataset(Seq(
-      CarEvent(0, position, temperature = 60, time = 1),
-      CarEvent(1, position, temperature = 40, time = 1),
-      CarEvent(0, position, temperature = 40, time = 1002),
-      CarEvent(1, position, temperature = 60, time = 10002)
+      CarEvent(1, position, temperature = 60, time = 1),
+      CarEvent(2, position, temperature = 40, time = 1),
+      CarEvent(1, position, temperature = 40, time = 1002),
+      CarEvent(2, position, temperature = 60, time = 10002)
     ))
 
     val alertTemperature = 50
@@ -26,8 +26,11 @@ class QueriesTest extends FlatSpec with Matchers with GivenWhenThen with SparkSe
     val carHighTemperature = Queries.lastStatusHighTemperature(carEvents, alertTemperature).collect()
 
     Then("it must return the CarEvent that that have high temperature in the last event")
-    carHighTemperature.size shouldBe 1
-    carHighTemperature.head shouldBe CarEvent(1, position, temperature = 60, time = 12)
+    carHighTemperature.size shouldBe 2
+    carHighTemperature.toSet shouldBe Array(
+      CarEvent(1, position, temperature = 60, time = 1),
+      CarEvent(2, position, temperature = 60, time = 10002)
+    ).toSet
   }
 
 }
