@@ -1,14 +1,12 @@
 package com.gilcu2
 
-import com.gilcu2.cars.CarEvent
+import com.gilcu2.cars.{CarEvent, Position, Queries}
 import com.gilcu2.interfaces.{ConfigValuesTrait, LineArgumentValuesTrait, SparkMainTrait}
 import com.typesafe.config.Config
-import org.apache.spark.sql.SparkSession
-import org.rogach.scallop.ScallopConf
-import io.circe._
 import io.circe.generic.auto._
-import io.circe.parser._
-import io.circe.syntax._
+import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.functions._
+import org.rogach.scallop.ScallopConf
 
 object IoTProcessingKafkaStreamingMain extends SparkMainTrait {
 
@@ -26,9 +24,16 @@ object IoTProcessingKafkaStreamingMain extends SparkMainTrait {
     val lines = df.selectExpr("CAST(value AS STRING)")
       .as[String]
 
-    val carEvents = lines.map(decode[CarEvent](_).right.getOrElse(CarEvent(0)))
+    val carEvents = lines
+      .map(line =>
+        io.circe.parser.decode[CarEvent](line)
+          .right.getOrElse(CarEvent(0, Position(0, 0), 0, 0))
+      )
+      .filter(_.id == 0)
 
-    val query = carEvents.writeStream
+    val alarmHighTemperature = Queries.lastStatusHighTemperature(carEvents, alertTemperature = 50)
+
+    val query = alarmHighTemperature.writeStream
       //      .outputMode("complete")
       .format("console")
       .start()
